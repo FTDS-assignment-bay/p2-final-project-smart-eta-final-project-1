@@ -143,7 +143,7 @@ Dengan insight ini, perusahaan dapat:
 **Bahasa Pemrograman & Tools** 
 - Python 3.9  
 - Jupyter Notebook  
-- Streamlit (untuk deployment interaktif) 
+- Hugging Face (untuk deployment interaktif) (https://huggingface.co/spaces/bputradana/deploygroup1)
 
 **Library Utama** 
 - `pandas`, `numpy`, `matplotlib`, `seaborn`  

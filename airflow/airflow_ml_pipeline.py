@@ -160,12 +160,10 @@ def model():
     best_xgb_model.fit(X_train, y_train)
     os.makedirs("/opt/airflow/dags/models", exist_ok=True)
     with open("/opt/airflow/dags/models/model.pkl", "wb") as f:
-        pickle.dump(model, f)
+        pickle.dump(best_xgb_model, f)
 
 def evaluate_model(**context):
     df = pd.read_csv("/opt/airflow/dags/dataset_clean.csv")
-    df = pd.get_dummies(df, columns=["weather", "traffic_level", "time_of_day", "vehicle_type"], drop_first=True)
-
 
     X = df.drop("delivery_time_min", axis=1)
     y = df["delivery_time_min"]
@@ -185,7 +183,7 @@ def evaluate_model(**context):
     # Simpan hasil evaluasi ke file log
     os.makedirs("/opt/airflow/dags/logs", exist_ok=True)
     with open("/opt/airflow/dags/logs/evaluation_log.txt", "a") as log:
-        log.write(f"{dt.now()} | MAE: {mae:.4f}, RMSE: {rmse:.4f}, R2: {r2:.4f}\n")
+        log.write(f"{dt.datetime.now()} | MAE: {mae:.4f}, RMSE: {rmse:.4f}, R2: {r2:.4f}\n")
 
 def deploy_model(**context):
     source = "/opt/airflow/dags/models/model.pkl"
@@ -194,12 +192,6 @@ def deploy_model(**context):
     os.makedirs("/opt/airflow/dags/deployment", exist_ok=True)
     os.replace(source, destination)
     print(f"Model deployed to {destination}")
-
-# Import clean CSV to elasticsearch
-# def load_data():
-#     """
-#     Import CSV Clean to elasticsearch
-#     """
 
 default_args = {
     'owner': 'food_delivery_ml_pipeline',
@@ -226,13 +218,10 @@ with DAG('Final_Project_Postgres_ETL',
                                    python_callable=model)
     
     evaluateModel = PythonOperator(task_id='Model_Evaluation',
-                                   python_callable=model)
+                                   python_callable=evaluate_model)
     
     deployModel = PythonOperator(task_id='Deploying_Model',
-                                   python_callable=model)
-    
-    # loadData = PythonOperator(task_id='Loading_Data_',
-    #                             python_callable=load_data)
+                                   python_callable=deploy_model)
     
     print_stop = BashOperator(task_id='stopping',
                                bash_command='echo "I done converting the CSV"')

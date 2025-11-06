@@ -6,7 +6,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green) 
 
 <p align="center"> 
-<img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" alt="Food Delivery Icon" width="100"/> 
+<img src="smart_eta_logo.png" alt="Food Delivery Icon" width="400"/> 
 </p> 
 
 --- 

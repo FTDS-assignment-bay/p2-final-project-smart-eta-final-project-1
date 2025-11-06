@@ -220,7 +220,7 @@ with DAG('Final_Project_Postgres_ETL',
     evaluateModel = PythonOperator(task_id='Model_Evaluation',
                                    python_callable=evaluate_model)
     
-    deployModel = PythonOperator(task_id='Deploying_Model',
+    deployModel = PythonOperator(task_id='Model_Saving',
                                    python_callable=deploy_model)
     
     print_stop = BashOperator(task_id='stopping',
